@@ -9,7 +9,7 @@
 //2 INTEGARAR BOTON PARA CAMBIO DE EXPRESIONES -----COMPLETADO-----
 //3 INTEGRAR ANIMACION DE PARPADEO -----EN PROCESO-----
 //4 INTEGRAR PANTALLA OLED SSD1306 PARA MOSTRAR UN HUD BASICO PARA MOSTRAR ESTADO DEL SYNTH -----COMPLETADO-----
-//5 INTEGRAR CONTROL DE LEDS WS2812B PARA ILUMINACION DEL SYNTH-----EN PROCESO-----
+//5 INTEGRAR CONTROL DE LEDS WS2812B PARA ILUMINACION DEL SYNTH-----COMPLETADO-----
 //6 CONTROLAR VENTILADOR POR PWM E INTEGRAR EN EL HUD -----EN PROCESO-----
 //7 ?PENSAR EN UTILIDADES FUTURAS -----EN PROCESO----
 
@@ -31,22 +31,23 @@
 #include <MaxMatrix.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <Adafruit_NeoPixel.h>
 
 
 //  MATRICEZ LADO IZQUIERDO
 const byte eyel0[] = {32, 8,
- B00000000, B00000000, B00000000, B00000000, B11000000, B11111000, B11111100, B11111110,
- B00000000, B00000000, B00000000, B00000000, B00000011, B00001111, B00001111, B00101111,
- B11111111, B11111111, B11111111, B11111111, B11111110, B11100000, B00000000, B00000000,
- B01101111, B01101111, B11101111, B11101111, B01111111, B00000111, B00000000, B00000000
+                            B00000000, B00000000, B00000000, B00000000, B11000000, B11111000, B11111100, B11111110,
+                            B00000000, B00000000, B00000000, B00000000, B00000011, B00001111, B00001111, B00101111,
+                            B11111111, B11111111, B11111111, B11111111, B11111110, B11100000, B00000000, B00000000,
+                            B01101111, B01101111, B11101111, B11101111, B01111111, B00000111, B00000000, B00000000
                            };
 
 
 const byte eyel1[] = {32, 8,
- B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B11111111,
- B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B01110111,
- B11111111, B11111111, B11111110, B11111100, B11111000, B11110000, B11000000, B00000000,
- B11110111, B11110111, B11110111, B01111111, B00111111, B00011111, B00000111, B00000000
+                             B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B11111111,
+                             B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B01110111,
+                             B11111111, B11111111, B11111110, B11111100, B11111000, B11110000, B11000000, B00000000,
+                             B11110111, B11110111, B11110111, B01111111, B00111111, B00011111, B00000111, B00000000
                            };
 
 
@@ -76,10 +77,10 @@ const byte eyer0[] = {32, 8,
 
 
 const byte eyer1[] = {32, 8,
- B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B11101110,
- B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B11111111,
- B11101111, B11101111, B11101111, B11111110, B11111100, B11111000, B11100000, B00000000,
- B11111111, B11111111, B01111111, B00111111, B00011111, B00001111, B00000011, B00000000
+                            B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B11101110,
+                            B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B11111111,
+                            B11101111, B11101111, B11101111, B11111110, B11111100, B11111000, B11100000, B00000000,
+                            B11111111, B11111111, B01111111, B00111111, B00011111, B00001111, B00000011, B00000000
                            };
 
 
@@ -109,13 +110,14 @@ int Boton = 2;      // BOTON PARA CAMBIO DE EXPRESION D2
 
 
 //configuraciones 
-int Brillo = 3;   // brillo 
+int Brillo = 3;   // brillo max 7219 
 
 int maxInUse = 8; 
 
 int estado = 0;
 
 MaxMatrix m(DIN, CS, CLK, maxInUse);
+
 
 // control lcd
 
@@ -191,6 +193,10 @@ const unsigned char PROGMEM logo_rhasky [] = {
 };
 
 
+#define WS_PIN 6
+#define WS_NUM 16 
+
+Adafruit_NeoPixel tira = Adafruit_NeoPixel(16, 6, NEO_GRB + NEO_KHZ800);
 
 void setup() {  
 
@@ -216,30 +222,37 @@ delay(2000);
 
 
 
-
 m.init();
 m.setIntensity(Brillo);
 m.clear();
 pinMode(Boton, INPUT_PULLUP);
 
+tira.begin();
+tira.show();
+
+
 }
-void loop() { 
+void loop() {
+
 
  if (digitalRead(Boton) == LOW) {
   estado++;
   if (estado > 3) estado = 0;
-  delay(100);
+  delay(60);
  }
 
+ tira.setBrightness(180);       // Brillo global para toda la tira 0 - 255
 
   switch (estado) {
   case 0:
+
+
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
   oled.setCursor (30,25);
-  oled.println("NORMAL");
+  oled.println("NORMAL");  // cambia este parametro  para cambiar el nombre de la expresion 
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
@@ -247,15 +260,21 @@ void loop() {
   oled.display();
   m.writeSprite(0, 0, eyel0);
   m.writeSprite(32, 0, eyer0); 
+  for(int i = 0; i < 16; i++) {
+    tira.setPixelColor(i, 0, 0, 255);   // codigo rgb cambia los 3 parametros entre o y 255 para seleccionar un color a gusto
+    tira.show();   
+  }
   break;
  
   case 1:
+
+
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
   oled.setCursor (30,25);
-  oled.println("SERIO");
+  oled.println("SERIO");  // nombre expression
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
@@ -263,6 +282,10 @@ void loop() {
   oled.display();
   m.writeSprite(0, 0, eyel1);
   m.writeSprite(32, 0, eyer1);
+  for(int i = 0; i < 16; i++) {
+    tira.setPixelColor(i, 255, 255, 0);   // posición, R, G, B
+    tira.show();   
+  }
   break;
 
   case 2:
@@ -272,7 +295,7 @@ void loop() {
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
   oled.setCursor (5,25);
-  oled.println("EMOCIONADO");
+  oled.println("EMOCIONADO");  // nombre expression
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
@@ -280,7 +303,11 @@ void loop() {
   oled.display();
   m.writeSprite(0, 0, eyel2);
   m.writeSprite(32, 0, eyer2);
-  break;
+  for(int i = 0; i < 16; i++) {
+    tira.setPixelColor(i, 0, 255, 0);   // posición, R, G, B
+    tira.show();   
+  }
+break;
 
   case 3: 
 
@@ -289,7 +316,7 @@ void loop() {
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
   oled.setCursor (30,25);
-  oled.println("MUERTO");
+  oled.println("MUERTO");  // nombre expression
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
@@ -297,10 +324,13 @@ void loop() {
   oled.display();
   m.writeSprite(0, 0, eyel3);
   m.writeSprite(32, 0, eyer3);
+  for(int i = 0; i < 16; i++) {
+    tira.setPixelColor(i, 255, 0, 0);   // posición, R, G, B
+    tira.show();   
+  }
   break;
  }
 }
-
 
 
 

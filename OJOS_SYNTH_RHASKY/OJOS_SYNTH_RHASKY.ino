@@ -210,7 +210,7 @@ oled.clearDisplay();
 oled.setTextSize (2);
 oled.setTextColor (WHITE);
 oled.setCursor (15,25);
-oled.println("SYNTH OSS");
+oled.println("SYNTH OS");
 oled.display();
 delay(2000);
 

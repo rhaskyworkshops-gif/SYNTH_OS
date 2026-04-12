@@ -75,7 +75,7 @@ A WS2812B LED strip or ring.
 
 Wokwi project link: Here you can see a simulation of the project. PROJECT
 
-https://wokwi.com/projects/460885221439343617
+https://wokwi.com/projects/461120406017542145
 
 CONNECTION
 

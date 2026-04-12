@@ -248,7 +248,7 @@ void loop() {
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursor (30,25);
+  oled.setCursor (30,25);   //  MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
   oled.println("NORMAL");  //  Change this parameter to change the expression name
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
@@ -270,7 +270,7 @@ void loop() {
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursor (30,25);
+  oled.setCursor (20,25); //  MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
   oled.println("SERIOUSLY");  // name expression
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
@@ -291,7 +291,7 @@ void loop() {
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursor (5,25);
+  oled.setCursor (5,25);   //  MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
   oled.println("EXCITED");  // name expression
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
@@ -312,11 +312,11 @@ break;
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursorDEAD (30,25);
+  oled.setCursor (30,25);  //  MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
   oled.println("DEAD");  // name expression
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
-  oled.setCursor (18,0);
+  oled.setCursor (18,0);  
   oled.println("EXPRESSION SHOWN");
   oled.display();
   m.writeSprite(0, 0, eyel3);

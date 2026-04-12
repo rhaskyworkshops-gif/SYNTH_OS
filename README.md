@@ -55,6 +55,52 @@ USAR UN MODULO STEP UP DE ALMENOS 2AMPS , PARA ELEVAR EL VOLTAJE DE 5 A 12 V,
 PODRA CAMBIAR EL COLOR DE LOS LEDS ASI COMO AUMENTAR LA CANTIDAD A CONTROLAR EN LAS CONFIGURACIONES 
 DEL CODIGO
 
+ENGLISH
+
+I realized there are many projects for Protogen, but almost nothing for Synth. I love this species, so I started creating this project. With it, you can build the electronics for a Synth head.
+
+I hope to add new features; for now, this is a basic project.
+
+For this project, you will need:
+
+A standard Arduino Nano or an Everyy (Everyy is recommended).
+
+Eight 8x8 LED matrices with Max 7219 LEDs.
+
+A normally open push button.
+
+An SSD1306 OLED display.
+
+A WS2812B LED strip or ring.
+
+Wokwi project link: Here you can see a simulation of the project. PROJECT
+
+https://wokwi.com/projects/460885221439343617
+
+CONNECTION
+
+It is recommended to solder the wires to avoid false contacts and potential electronic failure.
+
+It is recommended to power the Arduino externally. To do this, solder one wire to GND and another to 5V, and then connect these to a female USB Type-C input.
+
+Pushbutton Connection: Connect one pin to GND, the other pin to D2.
+
+To connect the matrices, connect D13 to CLK, D11 to DIN, and D10 to CS.
+
+It is important to be careful when soldering and avoid touching the matrix connections, as this will cause malfunctions. Erratic behavior may occur. If this happens, check the solder joints.
+
+OLED SSD1306 Screen Connection: VCC to 3.3V, GND to GND, SCL to A5, SDA to A4
+
+Attention! WS2812B LEDs
+
+DO NOT CONNECT THE POWER DIRECTLY TO THE ARDUINO. THESE LEDS CAN HAVE HIGH CURRENT CONSUMPTION. POWER THEM EXTERNALLY WITH 5V.
+
+WHS2812B LED CONNECTION: CONNECT DIN OR IN TO D6 (IMPORTANT: USE A 470 OMS RESISTOR BETWEEN THE ARDUINO AND THE STRIP). POWER WITH EXTERNAL 5V AND GND.
+
+NOTE: THERE ARE 12V VERSIONS OF THESE LEDS. IF YOU HAVE 12V VERSIONS, USE A STEP-UP MODULE OF AT LEAST 2 AMPS TO INCREASE THE VOLTAGE FROM 5V TO 12V.
+
+YOU CAN CHANGE THE COLOR OF THE LEDS AND INCREASE THE NUMBER TO CONTROL IN THE CODE CONFIGURATIONS.
+
 ![1776008136343](https://github.com/user-attachments/assets/c38520f2-21c0-4c68-9fd4-6406ecd13721)
 ![1776008136289](https://github.com/user-attachments/assets/22ea1043-1174-44b4-816a-8f68e8435f0b)
 ![1776008136234](https://github.com/user-attachments/assets/5055cddf-44a9-4777-ba70-59c54967e8b4)

@@ -10,8 +10,7 @@
 //3 INTEGRAR ANIMACION DE PARPADEO -----EN PROCESO-----
 //4 INTEGRAR PANTALLA OLED SSD1306 PARA MOSTRAR UN HUD BASICO PARA MOSTRAR ESTADO DEL SYNTH -----COMPLETADO-----
 //5 INTEGRAR CONTROL DE LEDS WS2812B PARA ILUMINACION DEL SYNTH-----COMPLETADO-----
-//6 CONTROLAR VENTILADOR POR PWM E INTEGRAR EN EL HUD -----EN PROCESO-----
-//7 ?PENSAR EN UTILIDADES FUTURAS -----EN PROCESO----
+//6 INTEGRAR SENSOR BOOP
 
 
 //el sentido de las matrices es el siguiente como indica el 1 indica la primera matriz 2 la segunda y la que sigue la primera sera la que este conectada al arduino , siguiendo las consecuentes 

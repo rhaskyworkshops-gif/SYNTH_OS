@@ -193,10 +193,10 @@ const unsigned char PROGMEM logo_rhasky [] = {
 };
 
 
-#define WS_PIN 6
-#define WS_NUM 16 
+#define WS_PIN 6 // PIN D6 DATOS WS2812B CONECTAR A IN O DIN 
+#define WS_NUM 16 // CANTIDAD DE LEDS A CONTROLAR , SE RECOMIENDA USAR ALIMENTACION EXTERNA NO LA DEL ARDUINO
 
-Adafruit_NeoPixel tira = Adafruit_NeoPixel(16, 6, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel tira = Adafruit_NeoPixel(16, 6, NEO_GRB + NEO_KHZ800); // CAMBIA EL NUMERO ENTRE LA PARENTECIS Y LA COMA POR LA CANTIDAD DE LEDS QUE CONTROLARAS (16,
 
 void setup() {  
 
@@ -261,7 +261,7 @@ void loop() {
   m.writeSprite(0, 0, eyel0);
   m.writeSprite(32, 0, eyer0); 
   for(int i = 0; i < 16; i++) {
-    tira.setPixelColor(i, 0, 0, 255);   // codigo rgb cambia los 3 parametros entre o y 255 para seleccionar un color a gusto
+    tira.setPixelColor(i, 0, 0, 255);   // codigo rgb cambia los 3 parametros entre 0 y 255 para seleccionar un color a gusto
     tira.show();   
   }
   break;

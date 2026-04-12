@@ -228,7 +228,7 @@ void loop() {
  if (digitalRead(Boton) == LOW) {
   estado++;
   if (estado > 3) estado = 0;
-  delay(200);
+  delay(100);
  }
 
 

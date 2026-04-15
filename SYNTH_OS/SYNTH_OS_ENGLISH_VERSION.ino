@@ -260,7 +260,7 @@ void loop() {
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
-  oled.println("EXPRESION ACTUAL");
+  oled.println("EXPRESSION SHOWN");
   oled.display();
 
  
@@ -280,7 +280,7 @@ void loop() {
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
-  oled.println("EXPRESION ACTUAL");
+  oled.println("EXPRESSION SHOWN");
   oled.display();
 
  
@@ -300,7 +300,7 @@ void loop() {
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
-  oled.println("EXPRESION ACTUAL");
+  oled.println("EXPRESSION SHOWN");
   oled.display();
 
 
@@ -320,7 +320,7 @@ break;
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
-  oled.println("EXPRESION ACTUAL");
+  oled.println("EXPRESSION SHOWN");
   oled.display();
 
   break;

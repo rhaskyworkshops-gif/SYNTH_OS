@@ -59,7 +59,7 @@ An SSD1306 OLED display.
 
 Wokwi project link: Here you can see a simulation of the project. PROJECT
 
-https://wokwi.com/projects/461120406017542145
+https://wokwi.com/projects/461348039039587329
 
 CONNECTION
 

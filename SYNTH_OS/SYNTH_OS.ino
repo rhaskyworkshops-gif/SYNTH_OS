@@ -9,8 +9,7 @@
 //2 INTEGARAR BOTON PARA CAMBIO DE EXPRESIONES -----COMPLETADO-----
 //3 INTEGRAR ANIMACION DE PARPADEO -----EN PROCESO-----
 //4 INTEGRAR PANTALLA OLED SSD1306 PARA MOSTRAR UN HUD BASICO PARA MOSTRAR ESTADO DEL SYNTH -----COMPLETADO-----
-//5 INTEGRAR CONTROL DE LEDS WS2812B PARA ILUMINACION DEL SYNTH-----COMPLETADO-----
-//6 INTEGRAR SENSOR BOOP
+//5 INTEGRAR SENSOR BOOP
 
 
 //el sentido de las matrices es el siguiente como indica el 1 indica la primera matriz 2 la segunda y la que sigue la primera sera la que este conectada al arduino , siguiendo las consecuentes 
@@ -30,7 +29,6 @@
 #include <MaxMatrix.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <Adafruit_NeoPixel.h>
 
 
 //  MATRICEZ LADO IZQUIERDO
@@ -101,20 +99,32 @@ const byte eyer3[] = {32, 8,
 
 
 
+unsigned long debouncetiempo = 0;
+
+byte counter2 = 0;
+byte column1L = 39;
+byte column2L = 47;
+byte column3L = 55;
+byte column4L = 63;
+byte column1 = -1;
+byte column2 = 7;
+byte column3 = 23;
+byte column4 = 31;
+bool rising = 1;
+bool estadoparpadeo = 0;
+long parpadeotiempo = 9000; // TIEMPO PARPADEO 1000 = A UN SEGUNDO
+
+
 int DIN = 11;       // PIN DIN MAX 7219 D11
 int CLK = 13;       // PIN CLK MAX 7219 D13
 int CS = 10;        // PIN CS MAX 7219 D10
-
 int Boton = 2;      // BOTON PARA CAMBIO DE EXPRESION D2
 
 
 //configuraciones 
 int Brillo = 3;   // brillo max 7219 
-
 int maxInUse = 8; 
-
 int estado = 0;
-
 MaxMatrix m(DIN, CS, CLK, maxInUse);
 
 
@@ -192,10 +202,6 @@ const unsigned char PROGMEM logo_rhasky [] = {
 };
 
 
-#define WS_PIN 6 // PIN D6 DATOS WS2812B CONECTAR A IN O DIN 
-#define WS_NUM 16 // CANTIDAD DE LEDS A CONTROLAR , SE RECOMIENDA USAR ALIMENTACION EXTERNA NO LA DEL ARDUINO
-
-Adafruit_NeoPixel tira = Adafruit_NeoPixel(16, 6, NEO_GRB + NEO_KHZ800); // CAMBIA EL NUMERO ENTRE LA PARENTECIS Y LA COMA POR LA CANTIDAD DE LEDS QUE CONTROLARAS (16,
 
 void setup() {  
 
@@ -226,8 +232,6 @@ m.setIntensity(Brillo);
 m.clear();
 pinMode(Boton, INPUT_PULLUP);
 
-tira.begin();
-tira.show();
 
 
 }
@@ -240,12 +244,13 @@ void loop() {
   delay(60);
  }
 
- tira.setBrightness(180);       // Brillo global para toda la tira 0 - 255
 
   switch (estado) {
   case 0:
 
-
+  Blink();
+  m.writeSprite(0, 0, eyel0);
+  m.writeSprite(32, 0, eyer0); 
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
@@ -257,17 +262,15 @@ void loop() {
   oled.setCursor (18,0);
   oled.println("EXPRESION ACTUAL");
   oled.display();
-  m.writeSprite(0, 0, eyel0);
-  m.writeSprite(32, 0, eyer0); 
-  for(int i = 0; i < 16; i++) {
-    tira.setPixelColor(i, 0, 0, 255);   // codigo rgb cambia los 3 parametros entre 0 y 255 para seleccionar un color a gusto
-    tira.show();   
-  }
+
+ 
   break;
  
   case 1:
 
-
+  Blink();
+  m.writeSprite(0, 0, eyel1);
+  m.writeSprite(32, 0, eyer1);
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
@@ -279,16 +282,15 @@ void loop() {
   oled.setCursor (18,0);
   oled.println("EXPRESION ACTUAL");
   oled.display();
-  m.writeSprite(0, 0, eyel1);
-  m.writeSprite(32, 0, eyer1);
-  for(int i = 0; i < 16; i++) {
-    tira.setPixelColor(i, 255, 255, 0);   // posición, R, G, B
-    tira.show();   
-  }
+
+ 
   break;
 
   case 2:
 
+  Blink();
+  m.writeSprite(0, 0, eyel2);
+  m.writeSprite(32, 0, eyer2);
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
@@ -300,16 +302,15 @@ void loop() {
   oled.setCursor (18,0);
   oled.println("EXPRESION ACTUAL");
   oled.display();
-  m.writeSprite(0, 0, eyel2);
-  m.writeSprite(32, 0, eyer2);
-  for(int i = 0; i < 16; i++) {
-    tira.setPixelColor(i, 0, 255, 0);   // posición, R, G, B
-    tira.show();   
-  }
+
+
 break;
 
   case 3: 
 
+  Blink();
+  m.writeSprite(0, 0, eyel3);
+  m.writeSprite(32, 0, eyer3);
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
@@ -321,12 +322,7 @@ break;
   oled.setCursor (18,0);
   oled.println("EXPRESION ACTUAL");
   oled.display();
-  m.writeSprite(0, 0, eyel3);
-  m.writeSprite(32, 0, eyer3);
-  for(int i = 0; i < 16; i++) {
-    tira.setPixelColor(i, 255, 0, 0);   // posición, R, G, B
-    tira.show();   
-  }
+
   break;
  }
 }
@@ -335,7 +331,47 @@ break;
 
 
 
-  
+void Blink() {
+  if ((millis() - debouncetiempo) >= parpadeotiempo) {                    //ANIMACION PARPADEO 
+    for (int i = 0; i < 8; i++) {
+      column1 = column1 + 1;
+      column2 = column2 + 1;
+      column3 = column3 - 1;
+      column4 = column4 - 1;
+      column1L = column1L + 1;
+      column2L = column2L + 1;
+      column3L = column3L - 1;
+      column4L = column4L - 1;
+
+      m.setColumn(column1, 00000000);
+      m.setColumn(column2, 00000000);
+      m.setColumn(column3, 00000000);
+      m.setColumn(column4, 00000000); 
+      m.setColumn(column1L, 00000000);
+      m.setColumn(column2L, 00000000);
+      m.setColumn(column3L, 00000000);
+      m.setColumn(column4L, 00000000);
+      delay(70);
+      counter2++;
+      debouncetiempo = millis();
+      rising = 1;
+      estadoparpadeo = 1;
+    }
+    column1 = -1;
+    column2 = 7;
+    column3 = 24;
+    column4 = 32;
+    column1L = 31;
+    column2L = 39;
+    column3L = 56;
+    column4L = 64;
+    counter2 = 0;
+  }
+}
+
+
+
+ 
 
 
 

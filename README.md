@@ -56,7 +56,6 @@ A normally open push button.
 
 An SSD1306 OLED display.
 
-A WS2812B LED strip or ring.
 
 Wokwi project link: Here you can see a simulation of the project. PROJECT
 

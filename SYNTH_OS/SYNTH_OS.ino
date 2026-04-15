@@ -102,14 +102,14 @@ const byte eyer3[] = {32, 8,
 unsigned long debouncetiempo = 0;
 
 byte counter2 = 0;
-byte column1L = 39;
-byte column2L = 47;
-byte column3L = 55;
-byte column4L = 63;
+byte column1L = 31;
+byte column2L = 39;
+byte column3L = 56;
+byte column4L = 64;
 byte column1 = -1;
 byte column2 = 7;
-byte column3 = 23;
-byte column4 = 31;
+byte column3 = 24;
+byte column4 = 32;
 bool rising = 1;
 bool estadoparpadeo = 0;
 long parpadeotiempo = 9000; // TIEMPO PARPADEO 1000 = A UN SEGUNDO

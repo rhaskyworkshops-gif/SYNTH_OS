@@ -6,10 +6,9 @@
 //STEPS TO IMPLEMENT
 //1 CONTROL 8 MATRIXES TO DISPLAY EYES ----COMPLETED----
 //2 INTEGRATE BUTTON FOR EXPRESSION CHANGE -----COMPLETED-----
-//3 INTEGRATE BLINK ANIMATION -----IN PROGRESS-----
+//3 INTEGRATE BLINK ANIMATION -----COMPLETED-----
 //4 INTEGRATE OLED SSD1306 DISPLAY TO DISPLAY A BASIC HUD FOR SYNTH STATUS -----COMPLETED-----
-//5 INTEGRATE CONTROL OF WS2812B LEDS FOR SYNTH ILLUMINATION -----COMPLETED-----
-//6 INTEGRATE BOOP SENSOR
+//5 INTEGRATE BOOP SENSOR
 
 //The order of the matrices is as follows: 1 indicates the first matrix, 2 the second, and the matrix following the first will be connected to the Arduino, following the sequence.
 //As shown, the maps are arranged; each number represents matrix 1, 2, 3, 4, etc., from bottom to top.
@@ -24,14 +23,14 @@
 
 
 
+
 #include <Wire.h>
 #include <MaxMatrix.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <Adafruit_NeoPixel.h>
 
 
-// LEFT SIDE MATRICES 
+// LEFT SIDE MATRICES
 const byte eyel0[] = {32, 8,
                             B00000000, B00000000, B00000000, B00000000, B11000000, B11111000, B11111100, B11111110,
                             B00000000, B00000000, B00000000, B00000000, B00000011, B00001111, B00001111, B00101111,
@@ -62,6 +61,7 @@ const byte eyel3[] = {32, 8,
                             B11000000, B01100000, B00110000, B00011000, B00000000, B00000000, B00000000, B00000000,
                             B00000011, B00000110, B00001100, B00011000, B00000000, B00000000, B00000000, B00000000
                            };
+
 
 
 //RIGHT SIDE MATRICES
@@ -99,31 +99,43 @@ const byte eyer3[] = {32, 8,
 
 
 
+unsigned long debouncetiempo = 0;
+
+byte counter2 = 0;
+byte column1L = 31;
+byte column2L = 39;
+byte column3L = 56;
+byte column4L = 64;
+byte column1 = -1;
+byte column2 = 7;
+byte column3 = 24;
+byte column4 = 32;
+bool rising = 1;
+bool estadoparpadeo = 0;
+long parpadeotiempo = 9000;   // BLINK TIME, 1000 = ONE SECOND
+
+
 int DIN = 11;       // PIN DIN MAX 7219 D11
 int CLK = 13;       // PIN CLK MAX 7219 D13
-int CS = 10;        // PIN CS MAX 7219 D10
-
-int Boton = 2;      // EXPRESSION CHANGE BUTTON D2
+int CS = 10;        // PIN CS MAX 7219 D10  
+int Boton = 2;        // EXPRESSION CHANGE BUTTON D2
 
 
 //configuraciones 
 int Brillo = 3;   // INTENSITY max 7219 
-
 int maxInUse = 8; 
-
-int estado = 0;
-
+int estado = 0;  
 MaxMatrix m(DIN, CS, CLK, maxInUse);
 
 
 // control lcd
 
-#define ANCHO 128
-#define ALTO 64
-#define OLED_RESET 4
-#define SALIDA_I2C_OLED 0x3c
+#define WIDTH 128
+#define HEIGHT 64
+#define OLED_RESET -1
+#define I2C_OLED_OUTPUT 0x3c
 
-Adafruit_SSD1306 oled(ANCHO, ALTO, &Wire, OLED_RESET);
+Adafruit_SSD1306 oled(WIDTH, HEIGHT, &Wire, OLED_RESET);
 
 #define LOGO_WIDTH 128
 #define LOGO_HEIGHT 57
@@ -190,14 +202,10 @@ const unsigned char PROGMEM logo_rhasky [] = {
 };
 
 
-#define WS_PIN 6 // PIN D6, DATA WS2812B CONNECT TO IN OR DIN    USE A 470 Ω RESISTOR BETWEEN THE ARDUINO AND THE LEDS
-#define WS_NUM 16 // NUMBER OF LEDS TO CONTROL  
-
-Adafruit_NeoPixel tira = Adafruit_NeoPixel(16, 6, NEO_GRB + NEO_KHZ800); // CHANGE THE NUMBER BETWEEN THE PARENTHESES AND THE COMMA TO THE NUMBER OF LEDS YOU WILL CONTROL (16,
 
 void setup() {  
 
-oled.begin(SSD1306_SWITCHCAPVCC, SALIDA_I2C_OLED);
+oled.begin(SSD1306_SWITCHCAPVCC, I2C_OLED_OUTPUT);
 
 oled.clearDisplay();
 oled.setTextSize (1);
@@ -224,8 +232,6 @@ m.setIntensity(Brillo);
 m.clear();
 pinMode(Boton, INPUT_PULLUP);
 
-tira.begin();
-tira.show();
 
 
 }
@@ -238,93 +244,85 @@ void loop() {
   delay(60);
  }
 
- tira.setBrightness(180);       // TOTAL LED INTENSITY  BETWEEN 0 AND 255
 
   switch (estado) {
   case 0:
 
-
+  Blink();
+  m.writeSprite(0, 0, eyel0);
+  m.writeSprite(32, 0, eyer0); 
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursor (30,25);   //  MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
+  oled.setCursor (30,25);    // MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
   oled.println("NORMAL");  //  Change this parameter to change the expression name
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
-  oled.println("EXPRESSION SHOWN");
+  oled.println("EXPRESION ACTUAL");
   oled.display();
-  m.writeSprite(0, 0, eyel0);
-  m.writeSprite(32, 0, eyer0); 
-  for(int i = 0; i < 16; i++) {
-    tira.setPixelColor(i, 0, 0, 255);   // RGB code changes the 3 parameters between 0 and 255 to select a color to your liking
-    tira.show();   
-  }
+
+ 
   break;
  
   case 1:
 
-
+  Blink();
+  m.writeSprite(0, 0, eyel1);
+  m.writeSprite(32, 0, eyer1);
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursor (20,25); //  MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
+  oled.setCursor (20,25);   // MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
   oled.println("SERIOUSLY");  // name expression
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
-  oled.println("EXPRESSION SHOWN");
+  oled.println("EXPRESION ACTUAL");
   oled.display();
-  m.writeSprite(0, 0, eyel1);
-  m.writeSprite(32, 0, eyer1);
-  for(int i = 0; i < 16; i++) {
-    tira.setPixelColor(i, 255, 255, 0);   // RGB position
-    tira.show();   
-  }
+
+ 
   break;
 
   case 2:
 
+  Blink();
+  m.writeSprite(0, 0, eyel2);
+  m.writeSprite(32, 0, eyer2);
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursor (5,25);   //  MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
+  oled.setCursor (5,25);     // MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
   oled.println("EXCITED");  // name expression
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
-  oled.println("EXPRESSION SHOWN");
+  oled.println("EXPRESION ACTUAL");
   oled.display();
-  m.writeSprite(0, 0, eyel2);
-  m.writeSprite(32, 0, eyer2);
-  for(int i = 0; i < 16; i++) {
-    tira.setPixelColor(i, 0, 255, 0);   // RGB position
-    tira.show();   
-  }
+
+
 break;
 
   case 3: 
 
+  Blink();
+  m.writeSprite(0, 0, eyel3);
+  m.writeSprite(32, 0, eyer3);
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursor (30,25);  //  MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
+  oled.setCursor(30,25);    // MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME 
   oled.println("DEAD");  // name expression
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
-  oled.setCursor (18,0);  
-  oled.println("EXPRESSION SHOWN");
+  oled.setCursor (18,0);
+  oled.println("EXPRESION ACTUAL");
   oled.display();
-  m.writeSprite(0, 0, eyel3);
-  m.writeSprite(32, 0, eyer3);
-  for(int i = 0; i < 16; i++) {
-    tira.setPixelColor(i, 255, 0, 0);   // RGB position
-    tira.show();   
-  }
+
   break;
  }
 }
@@ -333,7 +331,47 @@ break;
 
 
 
-  
+void Blink() {
+  if ((millis() - debouncetiempo) >= parpadeotiempo) {                    //BLINKING ANIMATION
+    for (int i = 0; i < 8; i++) {
+      column1 = column1 + 1;
+      column2 = column2 + 1;
+      column3 = column3 - 1;
+      column4 = column4 - 1;
+      column1L = column1L + 1;
+      column2L = column2L + 1;
+      column3L = column3L - 1;
+      column4L = column4L - 1;
+
+      m.setColumn(column1, 00000000);
+      m.setColumn(column2, 00000000);
+      m.setColumn(column3, 00000000);
+      m.setColumn(column4, 00000000); 
+      m.setColumn(column1L, 00000000);
+      m.setColumn(column2L, 00000000);
+      m.setColumn(column3L, 00000000);
+      m.setColumn(column4L, 00000000);
+      delay(70);
+      counter2++;
+      debouncetiempo = millis();
+      rising = 1;
+      estadoparpadeo = 1;
+    }
+    column1 = -1;
+    column2 = 7;
+    column3 = 24;
+    column4 = 32;
+    column1L = 31;
+    column2L = 39;
+    column3L = 56;
+    column4L = 64;
+    counter2 = 0;
+  }
+}
+
+
+
+ 
 
 
 

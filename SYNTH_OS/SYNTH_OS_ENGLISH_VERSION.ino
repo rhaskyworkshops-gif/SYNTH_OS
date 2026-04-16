@@ -11,6 +11,7 @@
 //3 INTEGRATE BLINK ANIMATION -----COMPLETED-----
 //4 INTEGRATE OLED SSD1306 DISPLAY TO DISPLAY A BASIC HUD FOR SYNTH STATUS -----COMPLETED-----
 //5 INTEGRATE BOOP SENSOR
+//INTEGRATES WS2812B LEDS FOR SYNTH LIGHTING   ----COMPLETED-----
 
 //The order of the matrices is as follows: 1 indicates the first matrix, 2 the second, and the matrix following the first will be connected to the Arduino, following the sequence.
 //As shown, the maps are arranged; each number represents matrix 1, 2, 3, 4, etc., from bottom to top.
@@ -306,7 +307,7 @@ void loop() {
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursor (30,25);   // CHANGE THE NUMBERS TO MODIFY THE NAME'S POSITION
+  oled.setCursor (10,25);   // CHANGE THE NUMBERS TO MODIFY THE NAME'S POSITION
   oled.println("SERIOUSLY");  // NAME EXPRESSION
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
@@ -331,7 +332,7 @@ void loop() {
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursor (5,25);    // CHANGE THE NUMBERS TO MODIFY THE NAME'S POSITION
+  oled.setCursor (20,25);    // CHANGE THE NUMBERS TO MODIFY THE NAME'S POSITION
   oled.println("EXCITED");  // NAME EXPRESSION
   oled.setTextSize (1);
   oled.setTextColor (WHITE);

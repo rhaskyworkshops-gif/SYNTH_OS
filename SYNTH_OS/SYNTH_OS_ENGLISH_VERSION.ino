@@ -1,7 +1,9 @@
 
+// Code created by rhasky, for synthesizer heads
 
 //You can use this code for your synth projects, but it is for personal use only. It is not permitted to use it for commissions or selling electronics.
 
+// In case of errors or bugs, please report them so that I can correct them
 
 //STEPS TO IMPLEMENT
 //1 CONTROL 8 MATRIXES TO DISPLAY EYES ----COMPLETED----
@@ -23,84 +25,91 @@
 
 
 
-
 #include <Wire.h>
 #include <MaxMatrix.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <Adafruit_NeoPixel.h>
+
 
 
 // LEFT SIDE MATRICES
 const byte eyel0[] = {32, 8,
-                            B00000000, B00000000, B00000000, B00000000, B11000000, B11111000, B11111100, B11111110,
                             B00000000, B00000000, B00000000, B00000000, B00000011, B00001111, B00001111, B00101111,
-                            B11111111, B11111111, B11111111, B11111111, B11111110, B11100000, B00000000, B00000000,
-                            B01101111, B01101111, B11101111, B11101111, B01111111, B00000111, B00000000, B00000000
+                            B00000000, B00000000, B00000000, B00000000, B11000000, B11111000, B11111100, B11111110,
+                            B01101111, B01101111, B11101111, B11101111, B01111111, B00000111, B00000000, B00000000,
+                            B11111111, B11111111, B11111111, B11111111, B11111110, B11100000, B00000000, B00000000
                            };
 
 
 const byte eyel1[] = {32, 8,
-                             B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B11111111,
                              B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B01110111,
-                             B11111111, B11111111, B11111110, B11111100, B11111000, B11110000, B11000000, B00000000,
-                             B11110111, B11110111, B11110111, B01111111, B00111111, B00011111, B00000111, B00000000
+                             B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B11111111,
+                             B11110111, B11110111, B11110111, B01111111, B00111111, B00011111, B00000111, B00000000,
+                             B11111111, B11111111, B11111110, B11111100, B11111000, B11110000, B11000000, B00000000
                            };
 
 
 const byte eyel2[] = {32, 8,
-                            B00000000, B11000000, B11110000, B11111000, B11111100, B11111100, B11111110, B11111110,
+                            
                             B00000000, B00000001, B00000001, B00011001, B00111001, B00111001, B01111001, B01111101,
-                            B11111110, B11111110, B11111100, B11111100, B11111000, B11110000, B11000000, B00000000,
-                            B01111111, B01111111, B00111111, B00111111, B00011111, B00001111, B00000011, B00000000
+                            B00000000, B11000000, B11110000, B11111000, B11111100, B11111100, B11111110, B11111110,
+                            B01111111, B01111111, B00111111, B00111111, B00011111, B00001111, B00000011, B00000000,
+                            B11111110, B11111110, B11111100, B11111100, B11111000, B11110000, B11000000, B00000000
                            };
 
 
 const byte eyel3[] = {32, 8,
-                            B00000000, B00000000, B00000000, B00011000, B00110000, B01100000, B11000000, B10000000,
+      
                             B00000000, B00000000, B00000000, B00011000, B00001100, B00000110, B00000011, B00000001,
-                            B11000000, B01100000, B00110000, B00011000, B00000000, B00000000, B00000000, B00000000,
-                            B00000011, B00000110, B00001100, B00011000, B00000000, B00000000, B00000000, B00000000
+                            B00000000, B00000000, B00000000, B00011000, B00110000, B01100000, B11000000, B10000000,
+                            B00000011, B00000110, B00001100, B00011000, B00000000, B00000000, B00000000, B00000000,
+                            B11000000, B01100000, B00110000, B00011000, B00000000, B00000000, B00000000, B00000000
+                        
                            };
-
 
 
 //RIGHT SIDE MATRICES
 const byte eyer0[] = {32, 8,
-                            B00000000, B00000000, B00000000, B00000000, B11000000, B11110000, B11110000, B11110100,
                             B00000000, B00000000, B00000000, B00000000, B00000011, B00011111, B00111111, B01111111,
-                            B11110110, B11110110, B11110111, B11110111, B11111110, B11100000, B00000000, B00000000,
-                            B11111111, B11111111, B11111111, B11111111, B01111111, B00000111, B00000000, B00000000
+                            B00000000, B00000000, B00000000, B00000000, B11000000, B11110000, B11110000, B11110100,
+                            B11111111, B11111111, B11111111, B11111111, B01111111, B00000111, B00000000, B00000000,
+                            B11110110, B11110110, B11110111, B11110111, B11111110, B11100000, B00000000, B00000000
+                            
                            };
 
 
-const byte eyer1[] = {32, 8,
-                            B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B11101110,
+const byte eyer1[] = {32, 8, 
                             B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B11111111,
-                            B11101111, B11101111, B11101111, B11111110, B11111100, B11111000, B11100000, B00000000,
-                            B11111111, B11111111, B01111111, B00111111, B00011111, B00001111, B00000011, B00000000
+                            B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B00000000, B11101110,
+                            B11111111, B11111111, B01111111, B00111111, B00011111, B00001111, B00000011, B00000000,
+                            B11101111, B11101111, B11101111, B11111110, B11111100, B11111000, B11100000, B00000000
+                           
                            };
 
 
-const byte eyer2[] = {32, 8,
-                            B00000000, B10000000, B10000000, B10011000, B10011100, B10011100, B10011110, B10111110,
+const byte eyer2[] = {32, 8, 
                             B00000000, B00000011, B00001111, B00011111, B00111111, B00111111, B01111111, B01111111,
-                            B11111110, B11111110, B11111100, B11111100, B11111000, B11110000, B11000000, B00000000,
-                            B01111111, B01111111, B00111111, B00111111, B00011111, B00001111, B00000011, B00000000
+                            B00000000, B10000000, B10000000, B10011000, B10011100, B10011100, B10011110, B10111110,
+                            B01111111, B01111111, B00111111, B00111111, B00011111, B00001111, B00000011, B00000000,
+                            B11111110, B11111110, B11111100, B11111100, B11111000, B11110000, B11000000, B00000000
+                            
                            };
 
 
 const byte eyer3[] = {32, 8,
-                            B00000000, B00000000, B00000000, B00011000, B00110000, B01100000, B11000000, B10000000,
                             B00000000, B00000000, B00000000, B00011000, B00001100, B00000110, B00000011, B00000001,
-                            B11000000, B01100000, B00110000, B00011000, B00000000, B00000000, B00000000, B00000000,
-                            B00000011, B00000110, B00001100, B00011000, B00000000, B00000000, B00000000, B00000000
+                            B00000000, B00000000, B00000000, B00011000, B00110000, B01100000, B11000000, B10000000,
+                            B00000011, B00000110, B00001100, B00011000, B00000000, B00000000, B00000000, B00000000,
+                            B11000000, B01100000, B00110000, B00011000, B00000000, B00000000, B00000000, B00000000
+                            
                            };                           
 
 
 
 
-unsigned long debouncetiempo = 0;
-
+// DO NOT TOUCH OTHER VARIABLES
+unsigned long debouncetime = 0;
 byte counter2 = 0;
 byte column1L = 31;
 byte column2L = 39;
@@ -111,29 +120,41 @@ byte column2 = 7;
 byte column3 = 24;
 byte column4 = 32;
 bool rising = 1;
-bool estadoparpadeo = 0;
-long parpadeotiempo = 9000;   // BLINK TIME, 1000 = ONE SECOND
+bool stateblink = 0;
+int state = 0;
+////////////////////////////////////////
 
+
+
+long timeblink = 9000; // TIME BETWEEN BLINKS, 1000 = ONE SECOND, HERE YOU CAN CHANGE THE TIME BETWEEN BLINKS
+
+
+     //MAX VARIABLES 7219                
 
 int DIN = 11;       // PIN DIN MAX 7219 D11
 int CLK = 13;       // PIN CLK MAX 7219 D13
-int CS = 10;        // PIN CS MAX 7219 D10  
-int Boton = 2;        // EXPRESSION CHANGE BUTTON D2
-
-
-//configuraciones 
-int Brillo = 3;   // INTENSITY max 7219 
+int CS = 10;        // PIN CS MAX 7219 D10
+int Boton = 2;      // EXPRESSION CHANGE BUTTON D2
+int Brillo = 5;   // BRIGHTNESS OF THE MAX 7219 MATRICES
 int maxInUse = 8; 
-int estado = 0;  
 MaxMatrix m(DIN, CS, CLK, maxInUse);
 
 
-// control lcd
+// CONTROL LEDS WS2812B
+
+
+#define WS_PIN 6 // PIN D6 DATA WS2812B, CONNECT TO DIN OR IN OF THE RING OR STRIP, IMPORTANT: USE A 470 OMS RESISTOR BETWEEN THE ARDUINO AND THE STRIP OR RING
+#define WS_NUM 100 //  NUMBER OF LEDS TO CONTROL
+Adafruit_NeoPixel tira = Adafruit_NeoPixel(100, 6, NEO_GRB + NEO_KHZ800); // CHANGE THE NUMBER BETWEEN THE PARENTHESES AND THE COMMA TO THE NUMBER OF LEDS TO CONTROL
+
+
+
+// CONTROL OLED 
 
 #define WIDTH 128
 #define HEIGHT 64
-#define OLED_RESET -1
-#define I2C_OLED_OUTPUT 0x3c
+#define OLED_RESET 4
+#define SALIDA_I2C_OLED 0x3c
 
 Adafruit_SSD1306 oled(WIDTH, HEIGHT, &Wire, OLED_RESET);
 
@@ -205,7 +226,7 @@ const unsigned char PROGMEM logo_rhasky [] = {
 
 void setup() {  
 
-oled.begin(SSD1306_SWITCHCAPVCC, I2C_OLED_OUTPUT);
+oled.begin(SSD1306_SWITCHCAPVCC, SALIDA_I2C_OLED);
 
 oled.clearDisplay();
 oled.setTextSize (1);
@@ -233,35 +254,45 @@ m.clear();
 pinMode(Boton, INPUT_PULLUP);
 
 
+tira.begin();
+tira.show();
+
+
+
 
 }
 void loop() {
 
 
  if (digitalRead(Boton) == LOW) {
-  estado++;
-  if (estado > 3) estado = 0;
-  delay(60);
+  state++;
+  if (state > 3) state = 0;
+  delay(30);
  }
 
+ tira.setBrightness(180);       // Brightness of the WS2812B LEDs, change the number between 0 and 255 to adjust the brightness
 
-  switch (estado) {
+  switch (state) {
   case 0:
 
   Blink();
-  m.writeSprite(0, 0, eyel0);
-  m.writeSprite(32, 0, eyer0); 
+  m.writeSprite(32, 0, eyel0);
+  m.writeSprite(0, 0, eyer0); 
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursor (30,25);    // MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
-  oled.println("NORMAL");  //  Change this parameter to change the expression name
+  oled.setCursor (30,25);    // CHANGE THE NUMBERS TO MODIFY THE NAME'S POSITION
+  oled.println("NORMAL");  // HERE YOU CAN CHANGE THE NAME OF THE EXPRESSION, IMPORTANT: THE NAME MUST BE IN QUOTATION MARKS
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
   oled.println("EXPRESSION SHOWN");
   oled.display();
+  for(int i = 0; i < 100; i++) {           
+    tira.setPixelColor(i, 255, 255, 255);   //Change the color to your liking by changing the parameters between 0 and 255. Look up the RGB code of the color you want to add.
+    tira.show();   
+  }
 
  
   break;
@@ -269,19 +300,24 @@ void loop() {
   case 1:
 
   Blink();
-  m.writeSprite(0, 0, eyel1);
-  m.writeSprite(32, 0, eyer1);
+  m.writeSprite(32, 0, eyel1);
+  m.writeSprite(0, 0, eyer1);
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursor (20,25);   // MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
-  oled.println("SERIOUSLY");  // name expression
+  oled.setCursor (30,25);   // CHANGE THE NUMBERS TO MODIFY THE NAME'S POSITION
+  oled.println("SERIOUSLY");  // NAME EXPRESSION
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
   oled.println("EXPRESSION SHOWN");
   oled.display();
+  for(int i = 0; i < 100; i++) {
+    tira.setPixelColor(i, 0, 255, 255);   // RGB CODE
+    tira.show();   
+  }
+
 
  
   break;
@@ -289,19 +325,25 @@ void loop() {
   case 2:
 
   Blink();
-  m.writeSprite(0, 0, eyel2);
-  m.writeSprite(32, 0, eyer2);
+  m.writeSprite(32, 0, eyel2);
+  m.writeSprite(0, 0, eyer2);
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursor (5,25);     // MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME
-  oled.println("EXCITED");  // name expression
+  oled.setCursor (5,25);    // CHANGE THE NUMBERS TO MODIFY THE NAME'S POSITION
+  oled.println("EXCITED");  // NAME EXPRESSION
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
   oled.println("EXPRESSION SHOWN");
   oled.display();
+  for(int i = 0; i < 100; i++) {
+    tira.setPixelColor(i, 128, 0, 128);   // RGB CODE
+    tira.show();   
+  }
+
+
 
 
 break;
@@ -309,19 +351,24 @@ break;
   case 3: 
 
   Blink();
-  m.writeSprite(0, 0, eyel3);
-  m.writeSprite(32, 0, eyer3);
+  m.writeSprite(32, 0, eyel3);
+  m.writeSprite(0, 0, eyer3);
   oled.clearDisplay();
   oled.drawLine(0,10,128,10,WHITE);
   oled.setTextSize (2);
   oled.setTextColor (WHITE);
-  oled.setCursor(30,25);    // MODIFY THE NUMBERS TO CHANGE THE POSITION OF THE NAME 
-  oled.println("DEAD");  // name expression
+  oled.setCursor (30,25);    // CHANGE THE NUMBERS TO MODIFY THE NAME'S POSITION 
+  oled.println("DEAD");  // NAME EXPRESSION
   oled.setTextSize (1);
   oled.setTextColor (WHITE);
   oled.setCursor (18,0);
   oled.println("EXPRESSION SHOWN");
-  oled.display();
+  oled.display(); 
+  for(int i = 0; i < 100; i++) {
+    tira.setPixelColor(i, 255, 0, 0);   // RGB CODE
+    tira.show();   
+  }
+
 
   break;
  }
@@ -332,7 +379,7 @@ break;
 
 
 void Blink() {
-  if ((millis() - debouncetiempo) >= parpadeotiempo) {                    //BLINKING ANIMATION
+  if ((millis() - debouncetime) >= timeblink) {                    //BLINK ANIMATION
     for (int i = 0; i < 8; i++) {
       column1 = column1 + 1;
       column2 = column2 + 1;
@@ -351,11 +398,11 @@ void Blink() {
       m.setColumn(column2L, 00000000);
       m.setColumn(column3L, 00000000);
       m.setColumn(column4L, 00000000);
-      delay(70);
+      delay(70); // BLINK RATE
       counter2++;
-      debouncetiempo = millis();
+      debouncetime = millis();
       rising = 1;
-      estadoparpadeo = 1;
+      stateblink = 1;
     }
     column1 = -1;
     column2 = 7;

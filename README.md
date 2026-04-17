@@ -1,3 +1,4 @@
+
 # SYNTH_OS
 
 ME DI CUENTA QUE HAY MUCHOS PROYECTOS PARA PROTOGEN , PERO CASI NADA PARA SYNTH , ESTA ESPECIE ME ENCANTA 
@@ -94,4 +95,5 @@ You can find configurations in the code for the LEDs, OLED display, etc.
 
 ![1776008136343](https://github.com/user-attachments/assets/c38520f2-21c0-4c68-9fd4-6406ecd13721)
 ![1776008136289](https://github.com/user-attachments/assets/22ea1043-1174-44b4-816a-8f68e8435f0b)
+<img width="4080" height="3072" alt="1776399135474" src="https://github.com/user-attachments/assets/988d5ed4-ab9e-4c53-b634-9249d5943534" />
 ![1776008136234](https://github.com/user-attachments/assets/5055cddf-44a9-4777-ba70-59c54967e8b4)
